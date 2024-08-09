@@ -1,0 +1,64 @@
+import tkinter as tk
+from tkinter import colorchooser, simpledialog
+import time
+
+class DigitalClock:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Digital Clock with Stopwatch")
+
+       
+        self.bg_color = 'black'
+        self.fg_color = 'white'
+        self.font_size = 40
+
+        self.time_label = tk.Label(root, font=('calibri', self.font_size, 'bold'),
+                                  background=self.bg_color, foreground=self.fg_color)
+        self.time_label.pack(anchor='center', padx=20, pady=10)
+
+        self.date_label = tk.Label(root, font=('calibri', 20, 'bold'),
+                                  background=self.bg_color, foreground=self.fg_color)
+        self.date_label.pack(anchor='center', padx=20, pady=10)
+
+        self.stopwatch_label = tk.Label(root, font=('calibri', 20, 'bold'),
+                                        background=self.bg_color, foreground=self.fg_color)
+        self.stopwatch_label.pack(anchor='center', padx=20, pady=10)
+
+        self.stopwatch_running = False
+        self.stopwatch_start_time = 0
+        self.stopwatch_elapsed_time = 0
+
+        self.start_button = tk.Button(root, text="Start Stopwatch", command=self.start_stopwatch)
+        self.start_button.pack(side=tk.LEFT, padx=10, pady=5)
+
+        self.stop_button = tk.Button(root, text="Stop Stopwatch", command=self.stop_stopwatch)
+        self.stop_button.pack(side=tk.LEFT, padx=10, pady=5)
+
+        self.reset_button = tk.Button(root, text="Reset Stopwatch", command=self.reset_stopwatch)
+        self.reset_button.pack(side=tk.LEFT, padx=10, pady=5)
+
+        self.settings_button = tk.Button(root, text="Settings", command=self.open_settings)
+        self.settings_button.pack(side=tk.LEFT, padx=10, pady=5)
+
+        self.update_clock()
+
+    def update_clock(self):
+        """Update the clock display with the current time and date."""
+        current_time = time.strftime('%H:%M:%S')
+        current_date = time.strftime('%A, %B %d, %Y')
+        self.time_label.config(text=current_time)
+        self.date_label.config(text=current_date)
+        self.update_stopwatch()
+        self.root.after(1000, self.update_clock)
+
+    def start_stopwatch(self):
+        """Start the stopwatch."""
+        if not self.stopwatch_running:
+            self.stopwatch_start_time = time.time() - self.stopwatch_elapsed_time
+            self.stopwatch_running = True
+
+    def stop_stopwatch(self):
+        """Stop the stopwatch."""
+        if self.stopwatch_running:
+            self.stopwatch_elapsed_time = time.time() - self.stopwatch_start_time
+            self.stopwatch_running = False
