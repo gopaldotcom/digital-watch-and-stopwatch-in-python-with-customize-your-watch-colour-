@@ -62,3 +62,43 @@ class DigitalClock:
         if self.stopwatch_running:
             self.stopwatch_elapsed_time = time.time() - self.stopwatch_start_time
             self.stopwatch_running = False
+
+
+    def reset_stopwatch(self):
+        """Reset the stopwatch."""
+        self.stopwatch_elapsed_time = 0
+        self.stopwatch_start_time = time.time()
+        self.update_stopwatch()
+
+    def update_stopwatch(self):
+        """Update the stopwatch display."""
+        if self.stopwatch_running:
+            self.stopwatch_elapsed_time = time.time() - self.stopwatch_start_time
+        formatted_time = self.format_time(self.stopwatch_elapsed_time)
+        self.stopwatch_label.config(text=f"Stopwatch: {formatted_time}")
+
+    def format_time(self, seconds):
+        """Format elapsed time in minutes and seconds."""
+        minutes = int(seconds // 60)
+        seconds = int(seconds % 60)
+        return f"{minutes:02}:{seconds:02}"
+
+    def open_settings(self):
+        """Open the settings dialog for customizing the clock appearance."""
+        self.bg_color = colorchooser.askcolor(title="Choose Background Color")[1]
+        self.fg_color = colorchooser.askcolor(title="Choose Foreground Color")[1]
+        self.font_size = simpledialog.askinteger("Font Size", "Enter the font size:", initialvalue=self.font_size)
+        
+        
+        self.time_label.config(background=self.bg_color, foreground=self.fg_color, font=('calibri', self.font_size, 'bold'))
+        self.date_label.config(background=self.bg_color, foreground=self.fg_color, font=('calibri', 20, 'bold'))
+        self.stopwatch_label.config(background=self.bg_color, foreground=self.fg_color, font=('calibri', 20, 'bold'))
+
+def main():
+    root = tk.Tk()
+    app = DigitalClock(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
+
